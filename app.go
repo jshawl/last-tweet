@@ -2,17 +2,19 @@ package main
 
 import (
   "fmt"
-  "io/ioutil"
-  "net/http"
+  "os"
+  "net/url"
+  "github.com/ChimeraCoder/anaconda"
 )
 
 func main(){
-  res, err := http.Get("https://api.github.com/users/jshawl")
-  contents, err := ioutil.ReadAll( res.Body )
-  res.Body.Close()
-  if err != nil {
-    fmt.Printf( "%s", err )
-  }
-
-  fmt.Printf( "%s\n", contents )
+  handle := os.Args[1]
+  anaconda.SetConsumerKey("...")
+  anaconda.SetConsumerSecret("...")
+  api := anaconda.NewTwitterApi("...", "...")
+  v := url.Values{}
+  v.Set("screen_name", handle )
+  res, _ := api.GetUserTimeline( v )
+  tweet := res[0]
+  fmt.Printf( "%s\n", tweet.Text )
 }
